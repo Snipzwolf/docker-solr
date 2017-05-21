@@ -21,6 +21,7 @@ RUN chmod 0555 /entrypoint && \
     tar -xf /opt/solr/apache-solr-3.6.2.tgz -C /opt/solr/ --strip 1 && \
     tar -xf /opt/tomcat/apache-tomcat-8.5.15.tar.gz -C /opt/tomcat/ --strip 1 && \
     rm /opt/tomcat/apache-tomcat-8.5.15.tar.gz /opt/solr/apache-solr-3.6.2.tgz && \
+    mv /opt/solr/dist/apache-solr-3.6.2.war /opt/tomcat/webapps/solr.war && \
     mkdir -pv /etc/solr/ /var/solr/ /opt/solr/lib/ && \
     addgroup --system --gid 501 solr && \
     useradd -u 501 -r -g 501 -s /bin/false -M solr && \

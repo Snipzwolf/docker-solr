@@ -38,10 +38,6 @@
     If 'null' (or absent), cores will not be manageable via request handler
   -->
   <cores adminPath="/admin/cores" shareSchema="true">
-
-  <core name="example" instanceDir="/etc/solr/example" dataDir="/var/solr/example" schema="/etc/solr/schema.xml" />
-
-  <!--<core name="nutch" instanceDir="nutch" dataDir="../../cores_data/nutch" />-->
-
+    <core name="example" instanceDir="/etc/solr/example" dataDir="/var/solr/example" schema="/etc/solr/schema.xml" />
   </cores>
 </solr>
