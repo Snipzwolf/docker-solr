@@ -21,10 +21,11 @@ RUN chmod 0555 /entrypoint && \
     tar -xf /opt/solr/apache-solr-3.6.2.tgz -C /opt/solr/ --strip 1 && \
     tar -xf /opt/tomcat/apache-tomcat-8.5.15.tar.gz -C /opt/tomcat/ --strip 1 && \
     rm /opt/tomcat/apache-tomcat-8.5.15.tar.gz /opt/solr/apache-solr-3.6.2.tgz && \
-    mkdir /etc/solr/ /var/solr/ /opt/solr/lib/ && \
-    chmod -R 0774 /etc/solr/ /var/solr/ /opt/ && \
+    mkdir -pv /etc/solr/ /var/solr/ /opt/solr/lib/ && \
     addgroup --system --gid 501 solr && \
-    useradd -u 501 -r -g 501 -s /bin/false -M solr &&
+    useradd -u 501 -r -g 501 -s /bin/false -M solr && \
+    chmod -R 0555 /entrypoint && \
+    /bin/bash -c "chmod -R 0664 {/etc/solr/,/var/solr/,/opt/} && find {/etc/solr/,/var/solr/,/opt/} -type d -exec chmod 775 {} \;" && \
     chown -R solr:solr /etc/solr/ /var/solr/ /opt/solr/ /opt/tomcat/
 
 RUN apt-get update && \
@@ -35,7 +36,8 @@ RUN apt-get update && \
 RUN apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:openjdk-r/ppa && \
     apt-get update && \
-    apt-get install -y openjdk-7-jdk
+    apt-get install -y openjdk-7-jdk && \
+    setcap 'cap_net_bind_service=+ep' /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
 
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 
@@ -43,6 +45,4 @@ RUN rm -rf /var/lib/apt/lists/*
 
 VOLUME ["/var/log/solr"]
 
-USER solr
-#ENTRYPOINT /bin/bash
 ENTRYPOINT /entrypoint
